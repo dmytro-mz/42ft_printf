@@ -1,0 +1,9 @@
+test.c
+a.out
+TO_DROP*
+*.h.*
+.DS_Store
+.idea/*
+.vscode/
+*.o
+*/libft.a
