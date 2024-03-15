@@ -7,7 +7,9 @@ const char *skip_conversion(const char *str);
 
 const char *skip_single_format(const char *str)
 {
-    str = skip_flags(str);
+    
+    str++;
+    str = skip_flags(str); // fix fact, that order of flags might be arbitral; use loop
     str = skip_number(str);
     str = skip_precision(str);
     str = skip_conversion(str);
@@ -16,8 +18,6 @@ const char *skip_single_format(const char *str)
 
 const char *skip_flags(const char *str)
 {
-    if (*str == '%')
-        str++;
     if (*str == '#')
         str++;
     if (*str == '0')
