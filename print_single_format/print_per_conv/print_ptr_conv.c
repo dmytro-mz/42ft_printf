@@ -1,25 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_char_conv.c                                  :+:      :+:    :+:   */
+/*   print_ptr_conv.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmoroz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/16 17:40:15 by dmoroz            #+#    #+#             */
-/*   Updated: 2024/03/17 18:31:59 by dmoroz           ###   ########.fr       */
+/*   Created: 2024/03/17 16:48:14 by dmoroz            #+#    #+#             */
+/*   Updated: 2024/03/17 18:30:44 by dmoroz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "print_single_format.h"
 
-int	print_char_conv(t_foramt_config conf, va_list args)
+int	print_ptr_conv(t_foramt_config conf, va_list args)
 {
-	char	c[2];
+	void	*ptr;
+	char	*str;
+	int		len;
 
-	c[1] = 0;
-	c[0] = va_arg(args, int);
-	if (conf.min_width > 1)
-		return (do_on_space_pading(conf, ft_strdup(c), 1));
-	ft_putchar_fd(c[0], 1);
-	return (1);
+	ptr = va_arg(args, void *);
+	if (!ptr)
+		str = ft_strdup("(nil)");
+	else
+		str = ft_strjoin("0x", ft_utobase((uintptr_t)ptr, "0123456789abcdef"));
+	len = ft_strlen(str);
+	if (conf.min_width > len)
+		return (do_on_space_pading(conf, str, len));
+	ft_putstr_fd(str, 1);
+	free(str);
+	return (len);
 }

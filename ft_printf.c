@@ -6,7 +6,7 @@
 /*   By: dmoroz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 11:18:16 by dmoroz            #+#    #+#             */
-/*   Updated: 2024/03/16 11:26:17 by dmoroz           ###   ########.fr       */
+/*   Updated: 2024/03/17 18:13:34 by dmoroz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	ft_printf(const char *format, ...)
 		else
 		{
 			total += ft_strlen(format);
-			ft_putstr_fd(format, 1);
+			ft_putstr_fd((char *)format, 1);
 			break ;
 		}
 	}

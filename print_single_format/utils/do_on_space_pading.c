@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   do_on_space_pading.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmoroz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 17:58:49 by dmoroz            #+#    #+#             */
-/*   Updated: 2024/03/16 18:10:14 by dmoroz           ###   ########.fr       */
+/*   Updated: 2024/03/17 17:43:02 by dmoroz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../print_single_format.h"
+#include "print_single_format.h"
 
-int	do_on_extra_space_pading(t_foramt_config conf, char *str, int len)
+int	do_on_space_pading(t_foramt_config conf, char *str, int len)
 {
 	int	i;
 
@@ -23,5 +23,6 @@ int	do_on_extra_space_pading(t_foramt_config conf, char *str, int len)
 		ft_putchar_fd(' ', 1);
 	if (!conf.left_adjusted)
 		ft_putstr_fd(str, 1);
+	free(str);
 	return (conf.min_width);
 }

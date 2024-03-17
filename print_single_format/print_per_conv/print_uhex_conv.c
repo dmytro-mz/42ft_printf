@@ -1,31 +1,53 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_str_conv.c                                   :+:      :+:    :+:   */
+/*   print_uhex_conv.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmoroz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/16 17:40:15 by dmoroz            #+#    #+#             */
+/*   Created: 2024/03/16 18:12:19 by dmoroz            #+#    #+#             */
 /*   Updated: 2024/03/17 17:43:31 by dmoroz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "print_single_format.h"
 
-int	print_str_conv(t_foramt_config conf, va_list args)
+static void	helper(t_foramt_config conf, char **num, int len)
 {
-	char	*s;
+	char	*tmp;
+
+	if (conf.alt_form)
+		conf.min_width -= 2;
+	pad_zeros(conf, num, len, 0);
+	if (conf.alt_form)
+	{
+		conf.min_width += 2;
+		tmp = ft_strjoin("0X", *num);
+		free(*num);
+		*num = tmp;
+	}
+}
+
+int	print_uhex_conv(t_foramt_config conf, va_list args)
+{
+	char	*num;
 	int		len;
 
-	s = va_arg(args, char *);
-	len = ft_strlen(s);
-	if (conf.precision >= 0 && conf.precision < len)
+	num = ft_utobase(va_arg(args, unsigned int), "0123456789ABCDEF");
+	if (!num)
+		return (0);
+	len = ft_strlen(num);
+	if (conf.precision == 0 && num[0] == '0')
 	{
-		s[conf.precision] = 0;
-		len = conf.precision;
+		num[0] = 0;
+		len = 0;
 	}
+	else
+		helper(conf, &num, len);
+	len = ft_strlen(num);
 	if (conf.min_width > len)
-		return (do_on_space_pading(conf, ft_strdup(s), len));
-	ft_putstr_fd(s, 1);
+		return (do_on_space_pading(conf, num, len));
+	ft_putstr_fd(num, 1);
+	free(num);
 	return (len);
 }

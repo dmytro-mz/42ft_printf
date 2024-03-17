@@ -6,4 +6,5 @@ TO_DROP*
 .idea/*
 .vscode/
 *.o
-*/libft.a
+*.a
+*/*.a

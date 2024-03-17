@@ -6,14 +6,14 @@
 /*   By: dmoroz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 11:31:15 by dmoroz            #+#    #+#             */
-/*   Updated: 2024/03/16 14:33:21 by dmoroz           ###   ########.fr       */
+/*   Updated: 2024/03/17 17:36:37 by dmoroz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "print_single_format.h"
 
-const char		*parse_flag(const char *format, t_foramt_config *conf);
 t_foramt_config	get_default_conf(void);
+void			parse_flag(const char *format, t_foramt_config *conf);
 
 t_foramt_config	parse_format_config(const char *format)
 {
@@ -21,7 +21,7 @@ t_foramt_config	parse_format_config(const char *format)
 
 	conf = get_default_conf();
 	while (ft_strchr("#0- +", *format))
-		format = parse_flag(format, &conf);
+		parse_flag(format++, &conf);
 	if (ft_isdigit(*format))
 		conf.min_width = ft_atoi(format);
 	format = skip_digits(format);
@@ -33,21 +33,6 @@ t_foramt_config	parse_format_config(const char *format)
 	}
 	conf.conversion = *format;
 	return (conf);
-}
-
-const char	*parse_flag(const char *format, t_foramt_config *conf)
-{
-	if (*format == '#')
-		conf->alt_form = 1;
-	else if (*format == '0')
-		conf->zero_padding = 1;
-	else if (*format == '-')
-		conf->left_adjusted = 1;
-	else if (*format == ' ')
-		conf->space_before_pos = 1;
-	else if (*format == '+')
-		conf->force_sign = 1;
-	return (++format);
 }
 
 t_foramt_config	get_default_conf(void)
@@ -63,6 +48,20 @@ t_foramt_config	get_default_conf(void)
 	conf.precision = -1;
 	conf.conversion = 0;
 	return (conf);
+}
+
+void	parse_flag(const char *format, t_foramt_config *conf)
+{
+	if (*format == '#')
+		conf->alt_form = 1;
+	else if (*format == '0')
+		conf->zero_padding = 1;
+	else if (*format == '-')
+		conf->left_adjusted = 1;
+	else if (*format == ' ')
+		conf->space_before_pos = 1;
+	else if (*format == '+')
+		conf->force_sign = 1;
 }
 
 // #include <stdio.h>
