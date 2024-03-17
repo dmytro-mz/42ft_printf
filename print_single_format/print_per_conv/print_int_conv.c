@@ -6,7 +6,7 @@
 /*   By: dmoroz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 14:36:46 by dmoroz            #+#    #+#             */
-/*   Updated: 2024/03/17 11:21:15 by dmoroz           ###   ########.fr       */
+/*   Updated: 2024/03/17 11:22:06 by dmoroz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,7 @@ void	pad_zeros(t_foramt_config conf, char **num, int len, int is_neg)
 	char	*tmp2;
 
 	expected_len = 0;
-	if (conf.precision == 0 && num[0] == '0')
-	{
-		free(*num);
-		num = ft_strup("");
-	}
-	else if (conf.precision >= 0)
+	if (conf.precision >= 0)
 		expected_len = conf.precision;
 	else if (conf.zero_padding && conf.min_width > 0 && !conf.left_adjusted)
 	{
