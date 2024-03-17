@@ -4,7 +4,7 @@
 
 0 - Zero padding.
     padded on the left with zeros rather than blanks.
-    If a precision is given with a numeric conversion (d, i, u, i, x, and X), the 0 flag is ignored.
+    If a precision is given with a numeric conversion (d, i, u, x, and X), the 0 flag is ignored.
 
 - - converted value is to be left adjusted on the field boundary;
     the converted value is padded on the right with blanks;

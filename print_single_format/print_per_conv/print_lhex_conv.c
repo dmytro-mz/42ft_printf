@@ -1,23 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   print_lhex_conv.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmoroz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/16 11:18:36 by dmoroz            #+#    #+#             */
-/*   Updated: 2024/03/16 11:18:37 by dmoroz           ###   ########.fr       */
+/*   Created: 2024/03/16 18:12:19 by dmoroz            #+#    #+#             */
+/*   Updated: 2024/03/16 18:12:21 by dmoroz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "../print_single_format.h"
 
-# include "libft.h"
-# include <stdarg.h>
-
-int			ft_printf(const char *format, ...);
-const char	*skip_single_format(const char *str);
-int			print_single_format(const char *format, va_list args);
-
-#endif
+int	print_lhex_conv(t_foramt_config conf, va_list args)
+{
+}

@@ -1,23 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmoroz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/16 11:18:36 by dmoroz            #+#    #+#             */
-/*   Updated: 2024/03/16 11:18:37 by dmoroz           ###   ########.fr       */
+/*   Created: 2024/03/16 17:58:49 by dmoroz            #+#    #+#             */
+/*   Updated: 2024/03/16 18:10:14 by dmoroz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "../print_single_format.h"
 
-# include "libft.h"
-# include <stdarg.h>
+int	do_on_extra_space_pading(t_foramt_config conf, char *str, int len)
+{
+	int	i;
 
-int			ft_printf(const char *format, ...);
-const char	*skip_single_format(const char *str);
-int			print_single_format(const char *format, va_list args);
-
-#endif
+	if (conf.left_adjusted)
+		ft_putstr_fd(str, 1);
+	i = -1;
+	while (++i < conf.min_width - len)
+		ft_putchar_fd(' ', 1);
+	if (!conf.left_adjusted)
+		ft_putstr_fd(str, 1);
+	return (conf.min_width);
+}

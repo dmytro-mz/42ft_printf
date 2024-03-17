@@ -1,23 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.h                                        :+:      :+:    :+:   */
+/*   print_str_conv.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmoroz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/16 11:18:36 by dmoroz            #+#    #+#             */
-/*   Updated: 2024/03/16 11:18:37 by dmoroz           ###   ########.fr       */
+/*   Created: 2024/03/16 17:40:15 by dmoroz            #+#    #+#             */
+/*   Updated: 2024/03/16 18:09:33 by dmoroz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_PRINTF_H
-# define FT_PRINTF_H
+#include "../print_single_format.h"
 
-# include "libft.h"
-# include <stdarg.h>
+int	print_str_conv(t_foramt_config conf, va_list args)
+{
+	char	*s;
+	int		len;
 
-int			ft_printf(const char *format, ...);
-const char	*skip_single_format(const char *str);
-int			print_single_format(const char *format, va_list args);
-
-#endif
+	s = va_arg(args, char *);
+	len = ft_strlen(s);
+	if (conf.precision >= 0 && conf.precision < len)
+	{
+		s[conf.precision] = 0;
+		len = conf.precision;
+	}
+	if (conf.min_width > len)
+		return (do_on_space_pading(conf, s, len));
+	ft_putstr_fd(s, 1);
+	return (len);
+}
