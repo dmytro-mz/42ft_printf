@@ -8,6 +8,7 @@ SRCS = ft_printf.c \
 ./print_single_format/utils/do_on_space_pading.c \
 ./print_single_format/utils/pad_zeros.c \
 ./print_single_format/utils/ft_utobase.c \
+./print_single_format/utils/ft_utoa.c \
 ./print_single_format/print_per_conv/print_ptr_conv.c \
 ./print_single_format/print_per_conv/print_str_conv.c \
 ./print_single_format/print_per_conv/print_uint_conv.c \

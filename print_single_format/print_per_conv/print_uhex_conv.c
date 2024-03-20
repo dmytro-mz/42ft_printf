@@ -6,7 +6,7 @@
 /*   By: dmoroz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 18:12:19 by dmoroz            #+#    #+#             */
-/*   Updated: 2024/03/17 17:43:31 by dmoroz           ###   ########.fr       */
+/*   Updated: 2024/03/20 20:40:29 by dmoroz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,13 @@
 static void	helper(t_foramt_config conf, char **num, int len)
 {
 	char	*tmp;
+	int		is_zero;
 
-	if (conf.alt_form)
+	is_zero = (**num == '0');
+	if (conf.alt_form && !is_zero)
 		conf.min_width -= 2;
 	pad_zeros(conf, num, len, 0);
-	if (conf.alt_form)
+	if (conf.alt_form && !is_zero)
 	{
 		conf.min_width += 2;
 		tmp = ft_strjoin("0X", *num);

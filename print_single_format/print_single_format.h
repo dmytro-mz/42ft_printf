@@ -6,7 +6,7 @@
 /*   By: dmoroz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 11:28:17 by dmoroz            #+#    #+#             */
-/*   Updated: 2024/03/17 17:42:51 by dmoroz           ###   ########.fr       */
+/*   Updated: 2024/03/20 18:09:16 by dmoroz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,6 @@ int				do_on_space_pading(t_foramt_config conf, char *str, int len);
 void			pad_zeros(t_foramt_config conf, char **num, int len,
 					int is_neg);
 char			*ft_utobase(uintptr_t n, const char *base);
+char			*ft_utoa(unsigned int n);
 
 #endif

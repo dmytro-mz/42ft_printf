@@ -1,6 +1,6 @@
 """
 This script generate tests cases for C printf function.
-Result is test cases each in new line in format: `run_test_case((*f)(<format>, <arguments>));`
+Result is test cases each in new line in format: `print_length((*f)(<format>, <arguments>));`
 where <format> is a string like `"%d %d"`, and <arguments> is respective arguments like `42, 73`.
 Values for pointer conversion has to be cast to `uintptr_t` type.
 """
@@ -57,24 +57,24 @@ def gen_tests(conf: dict, flags: dict = None):
 def gen_each_type_tests(n: int, flags: dict = None):
     for conv in SUPPORTED_CONVERSIONS:
         if conv == "%":
-            print(f'run_test_case((*f)("%%"));')
+            print(f'print_length((*f)("%%"));')
             continue
         conv_tests = set()
         if conv in CONVERSION_VALUE_LIMITS:
             p_cast = "(uintptr_t)" if conv == "p" else ""
             conv_tests.add(
-                f'run_test_case((*f)("%{gen_format_flags(conv, flags)}{conv}", {p_cast}{CONVERSION_VALUE_LIMITS[conv][0]}));'
+                f'print_length((*f)("%{gen_format_flags(conv, flags)}{conv}", {p_cast}{CONVERSION_VALUE_LIMITS[conv][0]}));'
             )
             conv_tests.add(
-                f'run_test_case((*f)("%{gen_format_flags(conv, flags)}{conv}", {p_cast}{CONVERSION_VALUE_LIMITS[conv][1]}));'
+                f'print_length((*f)("%{gen_format_flags(conv, flags)}{conv}", {p_cast}{CONVERSION_VALUE_LIMITS[conv][1]}));'
             )
             if conv == "p":
-                conv_tests.add(f'run_test_case((*f)("%{gen_format_flags(conv, flags)}{conv}", NULL));')
+                conv_tests.add(f'print_length((*f)("%{gen_format_flags(conv, flags)}{conv}", NULL));')
             while len(conv_tests) < n:
                 conv_tests.add(gen_single_conv_test_case(conv, flags))
         elif conv == "s":
             while len(conv_tests) < n:
-                conv_tests.add(gen_text_test_case())
+                conv_tests.add(gen_text_test_case(flags))
         else:
             raise ValueError(f"Unsupported conversion: {conv}")
         for test in conv_tests:
@@ -83,7 +83,7 @@ def gen_each_type_tests(n: int, flags: dict = None):
 
 def gen_single_conv_test_case(conv: str, flags: dict = None) -> str:
     format, arg = gen_format_arg(conv, flags)
-    return f'run_test_case((*f)("{format}", {arg}));'
+    return f'print_length((*f)("{format}", {arg}));'
 
 
 def gen_format_arg(conv: str, flags: dict = None) -> tuple:
@@ -114,7 +114,7 @@ def gen_format_flags(conv: str, flags: dict = None) -> str:
 
 def gen_text_test_case(flags: dict = None) -> str:
     _flags = gen_format_flags("s", flags)
-    return f'run_test_case((*f)("%{_flags}s", "{get_rand_text()}"));'
+    return f'print_length((*f)("%{_flags}s", "{get_rand_text()}"));'
 
 
 def get_rand_text() -> str:
@@ -140,7 +140,7 @@ def gen_multiconv_tests(n_convs: int, n: int, flags: dict = None):
                 args.append(f'"{get_rand_text()}"')
             elif conv == "%":
                 convs.append("%%")
-        print(f'run_test_case((*f)("{" ".join(convs)}", {", ".join(args)}));')
+        print(f'print_length((*f)("{" ".join(convs)}", {", ".join(args)}));')
 
 
 if __name__ == "__main__":

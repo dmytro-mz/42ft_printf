@@ -1,32 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_str_conv.c                                   :+:      :+:    :+:   */
+/*   test_main.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmoroz <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/16 17:40:15 by dmoroz            #+#    #+#             */
-/*   Updated: 2024/03/20 20:02:35 by dmoroz           ###   ########.fr       */
+/*   Created: 2024/03/20 18:14:52 by dmoroz            #+#    #+#             */
+/*   Updated: 2024/03/20 19:55:07 by dmoroz           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "print_single_format.h"
+#include "ft_printf.h"
+#include <stdio.h>
 
-int	print_str_conv(t_foramt_config conf, va_list args)
+void	run_tests(int (*f)());
+
+int	main(int ac, char *av[])
 {
-	char	*s;
-	int		len;
+	void	*func;
 
-	s = ft_strdup(va_arg(args, char *));
-	len = ft_strlen(s);
-	if (conf.precision >= 0 && conf.precision < len)
+	if (ac == 2)
 	{
-		s[conf.precision] = 0;
-		len = conf.precision;
+		if (!strcmp(av[1], "printf"))
+			func = &printf;
+		else if (!strcmp(av[1], "ft_printf"))
+			func = &ft_printf;
+		else
+		{
+			printf("ERROR: Wrong function name \"%s\".", av[1]);
+			return (0);
+		}
+		run_tests(func);
 	}
-	if (conf.min_width > len)
-		return (do_on_space_pading(conf, s, len));
-	ft_putstr_fd(s, 1);
-	free(s);
-	return (len);
+	else
+		printf("ERROR: Provide function name.");
+	return (0);
 }
