@@ -26,17 +26,35 @@ CONVERSION_VALUE_LIMITS = {
     # for string some random string and NULL
 }
 
+ALT_FORMS = [None, "#"]
+SIGNS = [None, "+", " "]
+ZERO_FILL_STARTS = ["0"]
+STANDARD_FILL_STARTS = [None, "-"]
+ALL_FILL_STARTS = STANDARD_FILL_STARTS + ZERO_FILL_STARTS
+PRECISION = [None, "."]
+POSSIBLE_CONVERSION_FLAGS = {
+    "d": [SIGNS, ALL_FILL_STARTS, PRECISION],
+    "i": [SIGNS, ALL_FILL_STARTS, PRECISION],
+    "u": [ALL_FILL_STARTS, PRECISION],
+    "x": [ALT_FORMS, ALL_FILL_STARTS, PRECISION],
+    "X": [ALT_FORMS, ALL_FILL_STARTS, PRECISION],
+    "c": [STANDARD_FILL_STARTS],
+    "s": [STANDARD_FILL_STARTS, PRECISION],
+    "p": [STANDARD_FILL_STARTS],
+    "%": [],
+}
 
-def gen_tests(conf: dict):
+
+def gen_tests(conf: dict, flags: dict = None):
     for k, v in conf.items():
         if k == "n_per_type":
-            gen_each_type_tests(v)
+            gen_each_type_tests(v, flags)
         else:
-            gen_multiconv_tests(k, v)
+            gen_multiconv_tests(k, v, flags)
 
 
 # make sure all test cases are unique
-def gen_each_type_tests(n: int):
+def gen_each_type_tests(n: int, flags: dict = None):
     for conv in SUPPORTED_CONVERSIONS:
         if conv == "%":
             print(f'run_test_case((*f)("%%"));')
@@ -44,12 +62,17 @@ def gen_each_type_tests(n: int):
         conv_tests = set()
         if conv in CONVERSION_VALUE_LIMITS:
             p_cast = "(uintptr_t)" if conv == "p" else ""
-            conv_tests.add(f'run_test_case((*f)("%{conv}", {p_cast}{CONVERSION_VALUE_LIMITS[conv][0]}));')
-            conv_tests.add(f'run_test_case((*f)("%{conv}", {p_cast}{CONVERSION_VALUE_LIMITS[conv][1]}));')
+            conv_tests.add(
+                f'run_test_case((*f)("%{gen_format_flags(conv, flags)}{conv}", {p_cast}{CONVERSION_VALUE_LIMITS[conv][0]}));'
+            )
+            conv_tests.add(
+                f'run_test_case((*f)("%{gen_format_flags(conv, flags)}{conv}", {p_cast}{CONVERSION_VALUE_LIMITS[conv][1]}));'
+            )
+            if conv == "p":
+                conv_tests.add(f'run_test_case((*f)("%{gen_format_flags(conv, flags)}{conv}", NULL));')
             while len(conv_tests) < n:
-                conv_tests.add(gen_single_conv_test_case(conv))
+                conv_tests.add(gen_single_conv_test_case(conv, flags))
         elif conv == "s":
-            conv_tests.add(f'run_test_case((*f)("%{conv}", NULL));')
             while len(conv_tests) < n:
                 conv_tests.add(gen_text_test_case())
         else:
@@ -58,20 +81,40 @@ def gen_each_type_tests(n: int):
             print(test)
 
 
-def gen_single_conv_test_case(conv: str) -> str:
-    format, arg = gen_format_arg(conv)
+def gen_single_conv_test_case(conv: str, flags: dict = None) -> str:
+    format, arg = gen_format_arg(conv, flags)
     return f'run_test_case((*f)("{format}", {arg}));'
 
 
-def gen_format_arg(conv: str) -> tuple:
-    limits = CONVERSION_VALUE_LIMITS[conv]
+def gen_format_arg(conv: str, flags: dict = None) -> tuple:
+    _flags = gen_format_flags(conv, flags)
     cast = "(uintptr_t)" if conv == "p" else ""
+    limits = CONVERSION_VALUE_LIMITS[conv]
+    if _flags:
+        limits = (-2 + (limits[0] < 0)) * (abs(limits[0]) % 100), limits[1] % 100
     value = randint(limits[0], limits[1])
-    return f"%{conv}", f"{cast}{value}"
+    return f"%{_flags}{conv}", f"{cast}{value}"
 
 
-def gen_text_test_case() -> str:
-    return f'run_test_case((*f)("%s", "{get_rand_text()}"));'
+def gen_format_flags(conv: str, flags: dict = None) -> str:
+    _flags = ""
+    if flags and conv in flags:
+        for flag_type in flags[conv]:
+            flag = sample(flag_type, 1)[0]
+            if flag:
+                if flag == "." and "0" in _flags:
+                    continue
+                _flags += flag
+            if "-" in flag_type:
+                _flags += str(randint(10, 20))
+            if flag == ".":
+                _flags += str(randint(0, 15))
+    return _flags
+
+
+def gen_text_test_case(flags: dict = None) -> str:
+    _flags = gen_format_flags("s", flags)
+    return f'run_test_case((*f)("%{_flags}s", "{get_rand_text()}"));'
 
 
 def get_rand_text() -> str:
@@ -82,18 +125,18 @@ def get_rand_text() -> str:
     return t
 
 
-def gen_multiconv_tests(n_convs: int, n: int):
+def gen_multiconv_tests(n_convs: int, n: int, flags: dict = None):
     for _ in range(n):
         convs = []
         args = []
         for _ in range(n_convs):
             conv = sample(SUPPORTED_CONVERSIONS, 1)[0]
             if conv in CONVERSION_VALUE_LIMITS:
-                format, arg = gen_format_arg(conv)
+                format, arg = gen_format_arg(conv, flags)
                 convs.append(format)
                 args.append(arg)
             elif conv == "s":
-                convs.append("%s")
+                convs.append(f"%{gen_format_flags(conv, flags)}s")
                 args.append(f'"{get_rand_text()}"')
             elif conv == "%":
                 convs.append("%%")
@@ -101,4 +144,5 @@ def gen_multiconv_tests(n_convs: int, n: int):
 
 
 if __name__ == "__main__":
-    gen_tests(mandatory_conf)
+    # gen_tests(mandatory_conf)
+    gen_tests(mandatory_conf, POSSIBLE_CONVERSION_FLAGS)
