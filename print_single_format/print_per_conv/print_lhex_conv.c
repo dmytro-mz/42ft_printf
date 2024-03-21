@@ -30,12 +30,12 @@ static void	helper(t_foramt_config conf, char **num, int len)
 	}
 }
 
-int	print_lhex_conv(t_foramt_config conf, va_list args)
+int	print_lhex_conv(t_foramt_config conf, va_list *args)
 {
 	char	*num;
 	int		len;
 
-	num = ft_utobase(va_arg(args, unsigned int), "0123456789abcdef");
+	num = ft_utobase(va_arg(*args, unsigned int), "0123456789abcdef");
 	if (!num)
 		return (0);
 	len = ft_strlen(num);

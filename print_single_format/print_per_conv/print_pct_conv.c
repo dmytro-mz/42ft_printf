@@ -12,7 +12,7 @@
 
 #include "print_single_format.h"
 
-int	print_pct_conv(t_foramt_config conf, va_list args)
+int	print_pct_conv(t_foramt_config conf, va_list *args)
 {
 	(void)conf;
 	(void)args;

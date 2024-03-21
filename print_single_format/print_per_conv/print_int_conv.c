@@ -14,13 +14,13 @@
 
 void	add_sign(t_foramt_config conf, char **num, int is_neg);
 
-int	print_int_conv(t_foramt_config conf, va_list args)
+int	print_int_conv(t_foramt_config conf, va_list *args)
 {
 	char	*num;
 	int		is_neg;
 	int		len;
 
-	num = ft_itoa(va_arg(args, int));
+	num = ft_itoa(va_arg(*args, int));
 	if (!num)
 		return (0);
 	len = ft_strlen(num);

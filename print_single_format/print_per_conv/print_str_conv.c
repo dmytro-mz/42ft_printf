@@ -14,12 +14,12 @@
 
 static void	on_null(char **s, t_foramt_config *conf);
 
-int	print_str_conv(t_foramt_config conf, va_list args)
+int	print_str_conv(t_foramt_config conf, va_list *args)
 {
 	char	*s;
 	int		len;
 
-	s = va_arg(args, char *);
+	s = va_arg(*args, char *);
 	if (s)
 		s = ft_strdup(s);
 	else

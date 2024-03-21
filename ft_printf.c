@@ -27,7 +27,7 @@ int	ft_printf(const char *format, ...)
 		{
 			total += tmp - format;
 			write(1, format, tmp - format);
-			total += print_single_format(tmp, args);
+			total += print_single_format(tmp, &args);
 			format = skip_single_format(tmp);
 		}
 		else

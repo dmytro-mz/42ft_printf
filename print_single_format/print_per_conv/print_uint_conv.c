@@ -12,12 +12,12 @@
 
 #include "print_single_format.h"
 
-int	print_uint_conv(t_foramt_config conf, va_list args)
+int	print_uint_conv(t_foramt_config conf, va_list *args)
 {
 	char	*num;
 	int		len;
 
-	num = ft_utoa(va_arg(args, unsigned int));
+	num = ft_utoa(va_arg(*args, unsigned int));
 	if (!num)
 		return (0);
 	len = ft_strlen(num);

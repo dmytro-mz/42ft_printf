@@ -12,7 +12,7 @@
 
 #include "print_single_format.h"
 
-int	print_single_format(const char *format, va_list args)
+int	print_single_format(const char *format, va_list *args)
 {
 	t_foramt_config	conf;
 

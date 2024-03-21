@@ -14,11 +14,11 @@
 
 static void	print_n_spaces(int n);
 
-int	print_char_conv(t_foramt_config conf, va_list args)
+int	print_char_conv(t_foramt_config conf, va_list *args)
 {
 	char	c;
 
-	c = va_arg(args, int);
+	c = va_arg(*args, int);
 	if (conf.min_width > 1 && !conf.left_adjusted)
 		print_n_spaces(conf.min_width - 1);
 	ft_putchar_fd(c, 1);

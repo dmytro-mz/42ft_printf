@@ -12,14 +12,14 @@
 
 #include "print_single_format.h"
 
-int	print_ptr_conv(t_foramt_config conf, va_list args)
+int	print_ptr_conv(t_foramt_config conf, va_list *args)
 {
 	void	*ptr;
 	char	*str;
 	char	*tmp;
 	int		len;
 
-	ptr = va_arg(args, void *);
+	ptr = va_arg(*args, void *);
 	if (!ptr)
 		str = ft_strdup("(nil)");
 	else
