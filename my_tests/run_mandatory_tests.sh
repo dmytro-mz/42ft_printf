@@ -8,7 +8,6 @@ make re -C ${parent_dir}
 make clean -C ${parent_dir}
 cc -Wall -Wextra -Werror ${script_dir}/test_main.c ${script_dir}/mandatory_tests.c \
     -L${parent_dir} -lftprintf \
-    -L${parent_dir}/libft/ -lft \
     -I${parent_dir} -I${parent_dir}/libft/ \
     -o mandatory
 echo ""

@@ -30,7 +30,8 @@ all: $(NAME)
 	$(CC) $(CFLAGS) $(INC_FLAGS) $(LIB_FLAGS) $< -o $@ 
 
 $(NAME): libft $(OBJS)
-	ar rcs $(NAME) $(OBJS)
+	cp ./libft/libft.a $(NAME)
+	ar r $(NAME) $(OBJS)
 
 clean:
 	rm -f $(OBJS)
